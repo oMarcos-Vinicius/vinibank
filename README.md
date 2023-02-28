@@ -135,3 +135,33 @@
 <p>Salvaremos o nosso código e acessaremos a aplicação novamente pelo navegador. No campo "Nome", se digitarmos qualquer texto com menos de três caracteres, uma mensagem uma será exibida abaixo do campo selecionado solicitando que aumentemos o texto para três caracteres ou mais. Já no campo "E-mail", se digitarmos um texto, um "@" e mais nada, será exibida uma mensagem solicitando que adicionemos um texto após esse símbolo. Por sua vez, no campo "CPF", se adicionarmos menos de onze caracteres, será exibida uma mensagem solicitando que preenchamos o total necessário — e se tentarmos preencher mais do que quatorze caracteres, o sistema para de inclui-los a partir do décimo quinto.</p>
 
 <p>Conseguimos realizar ainda mais tarefas com o HTML. No próximo vídeo veremos outro atributo que nos ajudará a validar os elementos do formulário.</p>
+
+<h2>06. Required</h2>
+
+<p>Já definimos os tipos para cada campo de digitação e também os números mínimo e máximo de caracteres que devem ser inseridos em cada um deles. Existe mais um elemento a ser incluído em nosso HTML: o atributo required ("obrigatório", em português), que torna obrigatório o preenchimento de um campo.</p>
+
+<p>Se repararmos na seção input name="cpf", aproximadamente na linha 80, já existe um required configurado para o campo de CPF. Vamos incluí-lo nos campos de "Nome", "E-mail", "RG", "Data de nascimento" e também no checkbox de aceite dos termos do banco.</p>
+
+<p>Atributo required no campo "CPF":</p>
+
+```
+                        <input name="cpf" id="cpf" class="campo__escrita campo__escrita--menor" required type="text"COPIAR CÓDIGO
+```
+
+<p>Atributo required nos campos "Nome", "E-mail", "RG" e "Data de nascimento" e no checkbox de aceite dos termos:</p>
+
+```
+                        <input name="nome" id="nome" class="campo__escrita" type="text" minlength="3" required />
+                        // Trecho de código omitido
+                        <input name="email" id="email" class="campo__escrita" type="email" minlength="4" required />
+                        // Trecho de código omitido
+                        <input name="rg" id="rg" class="campo__escrita campo__escrita--menor" type="text" required />
+                        // Trecho de código omitido
+                        <input name="aniversario" id="aniversario" class="campo__escrita campo__escrita--menor" type="date" required />
+                        // Trecho de código omitido
+                         <input name="termos" class="termos__input" type="checkbox" required>COPIAR CÓDIGO
+```
+
+<p>Agora não será mais possível enviar o formulário enquanto tivermos campos em branco. Isso evita que apareçam campos com valores vazios em nosso código.</p>
+
+<p>Realizamos vários tipos de validação com o HTML. A seguir iremos mais além nessas validações e partiremos para o Javascript. Nos vemos lá!</p>
