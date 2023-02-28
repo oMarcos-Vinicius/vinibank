@@ -94,3 +94,44 @@
 <p>Declaramos os tipos de cada formulário para garantir o padrão atual. Se colocarmos algum texto no campo de e-mail como teste e clicarmos em "Avançar", aparecerá uma caixa com uma mensagem de erro informando que precisamos inserir o @ e a URL depois dele, ou seja, a aplicação está cobrando que o padrão de inserção seja igual ao padrão do HTML.</p>
 
 <p>Já fizemos esse tipo de validação, mas não atingimos o máximo que podemos fazer em HTML. Em seguida, veremos outra coisa que vai ajudar nessa questão de validações somente com HTML. Eu te vejo no próximo vídeo!</p>
+
+<h2>05. Min-lenght e Max-length</h2>
+
+<p>Já inserimos os tipos em cada elemento HTML para que o conteúdo possa seguir um padrão de acordo com o objetivo de cada campo. Nos aventuraremos em outro problema: como regulamos a quantidade de caracteres em cada campo para evitar que a pessoa usuária insira dados incorretos?</p>
+
+<p>Acessaremos o arquivo abrir-conta-form.html em nossa IDE, e na seção input name="nome" adicionaremos um minLength de 3. Este atributo determina a quantidade mínima de caracteres que deve ser inserida e impede que um campo seja mantido vazio. Já na seção input name="email" adicionaremos um minLength de 4. Por último, adicionaremos um minLength de tamanho 11 na seção input name="cpf". O rg não possuirá um valor mínimo de caracteres, pois conforme vimos anteriormente, cada estado possui um padrão diferente.</p>
+
+<p>Observação: não existe um padrão para o valor do minLength.</p>
+
+<p>No campo de CPF, adicionaremos um maxLength="14" para definir também a quantidade máxima, visto que esse documento pode possuir ou não caracteres especiais.</p>
+
+```
+            <form class="principal__formulario" data-formulario>
+                <fieldset class="formulario__campo">
+                    <label class="campo__etiqueta" for="nome">Nome</label>
+                    <input name="nome" id="nome" class="campo__escrita" type="text" minlength="3"/>
+                    <span class="mensagem-erro"></span>
+                </fieldset>
+
+                <fieldset class="formulario__campo">
+                    <label class="campo__etiqueta" for="email">E-mail</label>
+                    <input name="email" id="email" class="campo__escrita" type="email" minlength="4"/>
+                    <span class="mensagem-erro"></span>
+                </fieldset>
+                <fieldset class="formulario__campo">
+                    <label class="campo__etiqueta" for="rg">RG</label>
+                    <input name="rg" id="rg" class="campo__escrita campo__escrita--menor" type="text"/>
+                    <span class="mensagem-erro"></span>
+                </fieldset>
+                <fieldset class="formulario__campo">
+                    <label class="campo__etiqueta" for="cpf">CPF (apenas números)</label>
+                    <input name="cpf" id="cpf" class="campo__escrita campo__escrita--menor" required type="text"
+                        minlength="11" maxLength="14"/>
+                    <span class="mensagem-erro"></span>
+                </fieldset>
+                // Trecho de código omitidoCOPIAR CÓDIGO
+```
+
+<p>Salvaremos o nosso código e acessaremos a aplicação novamente pelo navegador. No campo "Nome", se digitarmos qualquer texto com menos de três caracteres, uma mensagem uma será exibida abaixo do campo selecionado solicitando que aumentemos o texto para três caracteres ou mais. Já no campo "E-mail", se digitarmos um texto, um "@" e mais nada, será exibida uma mensagem solicitando que adicionemos um texto após esse símbolo. Por sua vez, no campo "CPF", se adicionarmos menos de onze caracteres, será exibida uma mensagem solicitando que preenchamos o total necessário — e se tentarmos preencher mais do que quatorze caracteres, o sistema para de inclui-los a partir do décimo quinto.</p>
+
+<p>Conseguimos realizar ainda mais tarefas com o HTML. No próximo vídeo veremos outro atributo que nos ajudará a validar os elementos do formulário.</p>
