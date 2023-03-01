@@ -165,3 +165,30 @@
 <p>Agora não será mais possível enviar o formulário enquanto tivermos campos em branco. Isso evita que apareçam campos com valores vazios em nosso código.</p>
 
 <p>Realizamos vários tipos de validação com o HTML. A seguir iremos mais além nessas validações e partiremos para o Javascript. Nos vemos lá!</p>
+
+<h1>Módulo 02: Validando com JS</h1>
+
+<h2>02. Pattern e Regex</h2>
+
+<p>Aprendemos anteriormente que o campo de CPF é constituído de três grupos de três dígitos e um grupo de dois dígitos, onde cada grupo é separado por caracteres especiais como ponto e hífen. Como configuramos o sistema para que siga esse padrão?</p>
+
+<p>Na seção input name="cpf", após o atributo maxLength, adicionaremos um pattern que possuirá o comando "\d{3}\.?" repetido três vezes, sendo que na última repetição o ponto (.) deverá ser substituído por traço (-). Por fim, ainda no interior deste comando, adicionaremos "\d{2}".</p>
+
+```
+ <input name="cpf" id="cpf" class="campo__escrita campo__escrita--menor" required type="text" minlength="11" maxlength="14" pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"/>COPIAR CÓDIGO
+```
+
+<p>Este tipo de código é chamado de Expressão Regular, ou Regex. O único requisito para a sua utilização é introduzi-lo dentro de um pattern. Este por sua vez criará um formato específico que deve ser seguido pelo conteúdo inserido — em nosso caso o CPF. Vamos analisar a expressão regular que utilizamos acima:</p>
+
+<p>
+    - o trecho \d{3}\ agrupa um número de 0 a 9 por três vezes;
+    - o trecho .? indica que o grupo de dígitos poderá ser seguido por um ponto, onde o ? indica que esse critério é opcional.
+    - o trecho -? indica que o grupo de dígitos poderá ser seguido por um traço, critério que também é opcional.
+    - o trecho final \d{2} agrupa um número de 0 a 9 por duas vezes.
+</p>
+
+<p>Esta combinação de comandos cria o formato para o CPF que informamos anteriormente, garantindo que sejam aceitos inputs com e sem pontuação.</p>
+
+<p>Caso queira saber mais sobre Expressões Regulares, acesse a seção "Para saber mais" sobre expressões regulares deste curso.</p>
+
+<p>A seguir começaremos a preparar o nosso projeto para receber validações customizadas diretamente pelo Javascript. Nos vemos lá!</p>
