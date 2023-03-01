@@ -192,3 +192,57 @@
 <p>Caso queira saber mais sobre Expressões Regulares, acesse a seção "Para saber mais" sobre expressões regulares deste curso.</p>
 
 <p>A seguir começaremos a preparar o nosso projeto para receber validações customizadas diretamente pelo Javascript. Nos vemos lá!</p>
+
+<h2>03. AddEventListener</h2>
+
+<p>Até o momento criamos validações somente em HTML, o que limita um pouco nossas opções. Temos dois campos dedicados exclusivamente a documentos brasileiros cujo padrão não existe em HTML, e por isso precisamos criar uma lógica por trás destes campos. Para isso criaremos um arquivo Javascript. Acessaremos o explorador do Visual Studio Code, selecionaremos a pasta "monibank" e clicaremos no ícone de "New Folder" (ou "Nova Pasta") na barra superior do explorador. Essa nova pasta se chamará "js". Em seu interior criaremos o arquivo script.js clicando no ícone de "New File" ("Novo Arquivo") também localizado na barra superior do explorador.</p>
+
+<p>Acessaremos novamente o arquivo abrir-conta-form.html. Após a seçção <\footer> e antes de <\body> importaremos o arquivo JS, inserindo um type="module". Desta forma incluiremos nesta página toda a lógica que será implementada no arquivo Javascript.</p>
+
+```
+        //Trecho de código omitido
+    </footer>
+    <script src="../js/script.js" type="module"></script>
+</body>COPIAR CÓDIGO
+```
+
+<p>Separaremos cada motivação em um arquivo diferente, que serão unidos em um único script. Esta técnica se chama modularização. Para que ela funcione corretamente, precisamos especificar o tipo module.</p>
+
+<p>Após realizarmos essa associação, retornaremos ao arquivo script.js e criaremos a variável camposDoFormulario do tipo constante (const) que receberá todos os elementos do HTML que possuem o atributo required — ou seja, todos os elementos de preenchimento obrigatório.</p>
+
+```
+const camposDoFormulario = document.querySelectorAll("[required]");COPIAR CÓDIGO
+```
+
+<p>Vamos verificar a lista de elementos captados através de um console.log.</p>
+
+```
+console.log(camposDoFormulario);COPIAR CÓDIGO
+```
+
+<p>Em seguida abriremos no navegador a página de formulário do Monibank e também a aba "Console" no interior da aba "Ferramentas do Desenvolvedor", que pode ser acessada através do atalho "Ctrl + Shift + I". Veremos em "Console" uma NodeList com os seis elementos de input da tela já selecionados. Precisamos adicionar um comando que "ouça" o evento de digitação em cada campo para em seguida realizar as validações.</p>
+
+<p>Retornando ao arquivo script.js, deletaremos o console.log e adicionaremos a variável camposDoFormulario junto ao comando forEach, que possuirá uma função seta ("arrow function", em inglês) (campo) => {}. No interior dos colchetes adicionaremos um campo.addEventListener() que possuirá um "blur" e outra função de seta que chamará verificaCampo, que por sua vez receberá o valor de campo. Configuraremos 'a função verificaCampo posteriormente.</p>
+
+```
+    camposDoFormulario.forEach((campo) => {
+        campo.addEventListener("blur", () => verificaCampo(campo));
+    })COPIAR CÓDIGO
+<
+```
+
+<p>Vamos entender o trecho de código que implementamos? Cada campo do formulário será recuperado pela função forEach e chamado de campo, que por sua vez possuirá um event listener aguardando o evento blur acontecer. O blur ("desfoque", em português) se caracteriza por um clique fora do input, ou seja, assim que o campo que estava sendo preenchido estiver fora de foco, o event listener disparará a função verificaCampo.</p>
+
+<p>Finalmente criaremos a base da função verificaCampo().</p>
+
+```
+    camposDoFormulario.forEach((campo) => {
+        campo.addEventListener("blur", () => verificaCampo(campo));
+    })
+    
+    function verificaCampo(campo){
+    
+    }COPIAR CÓDIGO
+```
+
+<p>A seguir, colocaremos a mão na massa e construiremos a verificação no interior desta função. Nos vemos lá!</p>
