@@ -246,3 +246,103 @@ console.log(camposDoFormulario);COPIAR CÓDIGO
 ```
 
 <p>A seguir, colocaremos a mão na massa e construiremos a verificação no interior desta função. Nos vemos lá!</p>
+
+<h2>05. Verificar CPF</h2>
+
+<p>Vamos relembrar? Quando importamos o arquivo script.js dentro do HTML definimos o tipo module pois as validações seriam separadas em arquivos diferentes e se encontrariam no script. Vamos colocar essa funcionalidade em prática iniciando pelas validações de CPF.</p>
+
+<p>Acessaremos o explorador, clicaremos na pasta "js" e em seguida no ícone de "Novo Arquivo". Daremos a este novo arquivo o nome valida-cpf.js. No interior dele adicionaremos um export default function com a função ehumCPF() que receberá um campo. Dentro dessa função criaremos uma variável const chamada cpf que receberá o comando campo.value.replace(/\.|-g,""). Adicionaremos também um console.log para imprimir o resultado.</p>
+
+```
+export default function ehUmCPF(campo) {
+    const cpf = campo.value.replace(/\.|-/g, "");
+    console.log(cpf);
+}COPIAR CÓDIGO
+```
+
+<p>Vamos entender este trecho de código? A função ehUmCPF foi configurada para ser exportada como padrão, ou seja, quando chamarmos o arquivo valida-cpf esta função será retornada. Criamos também uma função tradicional que receberá o valor de campo com o método replace, que por sua vez recebe dois parâmetros: o primeiro indica o conteúdo que queremos substituir (no caso, os caracteres especiais . e -), enquanto o segundo indica o conteúdo que será utilizado para substituí-lo (no caso, um campo vazio). Através desta função, efetuamos a remoção dos caracteres especiais nos casos de inputs com essa característica, normalizando esses valores e tornando mais fácil a comparação e validação entre os tipos de CPF inseridos.</p>
+
+<p>Salvaremos o código e acessaremos o arquivo script.js. Na linha 1, acima da variável const camposDoFormulario, adicionaremos o ìmport da função ehUmCPF para habilitarmos o seu uso.</p>
+
+```
+import ehUmCPF from "./valida-cpf.js";COPIAR CÓDIGO
+```
+
+<p>Adicionaremos no interior da function verificaCampo um if que retorna a função ehUmCPF nos casos em que o nome do campo for "cpf" e seu valor for maior ou igual a 11.</p>
+
+<p>Observação: Nos casos que fogem a esta regra, um outro erro deverá ser retornado. Não o abordaremos neste momento.</p>
+
+```
+import ehUmCPF from "./valida-cpf.js";
+const camposDoFormulario = document.querySelectorAll('[required]')
+
+camposDoFormulario.forEach((campo) => {
+    campo.addEventListener("blur", () => verificaCampo(campo));
+})
+
+function verificaCampo(campo) {
+    if (campo.name == "cpf" && campo.value.length >= 11) {
+        ehUmCPF(campo);
+    }
+}COPIAR CÓDIGO
+```
+
+<p>Se retornarmos ao navegador e digitarmos um valor numérico qualquer no campo de CPF, veremos que ele será retornado na aba "Console". Se digitarmos um cpf com caracteres especiais, ele será retornado no Console sem estes caracteres.</p>
+
+<p>Dica: para encontrar um CPF válido com caracteres especiais, utilize o site Gerador de CPFs disponível neste link.</p>
+
+<p>Já chamamos um arquivo externo e transformamos os valores de CPF em números simples. Em seguida configuraremos as validações em si.</p>
+
+<p>A primeira etapa é configurar a validação de números repetidos, já que não existem CPFs com todos os números iguais, como por exemplo "111.111.111-11". Para isso acessaremos o arquivo valida-cpf.js e criaremos a função validaNumerosRepetidos() que receberá o valor de cpf. Em seu interior criaremos a lista const numerosRepetidos que receberá todas as combinações de 11 números repetidos, de 0 até 9.</p>
+
+```
+function validaNumerosRepetidos(cpf) {
+    const numerosRepetidos = [
+    '00000000000',
+    '11111111111',
+    '22222222222',
+    '33333333333',
+    '44444444444',
+    '55555555555',
+    '66666666666',
+    '77777777777',
+    '88888888888',
+    '99999999999'
+    ]COPIAR CÓDIGO
+```
+
+<p>Dessa forma conseguimos verificar se o número que inserimos no campo de CPF está nessa lista de números repetidos. Para isso criaremos um return com o método numerosRepetidos.includes(cpf). Caso o valor do CPF inserido seja encontrado na lista de repetições, o método retornará true, caso contrário retornará false.</p>
+
+```
+function validaNumerosRepetidos(cpf) {
+    const numerosRepetidos = [
+    '00000000000',
+    '11111111111',
+    '22222222222',
+    '33333333333',
+    '44444444444',
+    '55555555555',
+    '66666666666',
+    '77777777777',
+    '88888888888',
+    '99999999999'
+    ]
+
+    return numerosRepetidos.includes(cpf)
+}COPIAR CÓDIGO
+```
+
+<p>Chamaremos a função validaNumerosRepetidos no interior da função ehUmCPF, substituindo o console.log que deletamos anteriormente. Adicionaremos logo abaixo um novo console.log que retornará a própria chamada da função.</p>
+
+```
+export default function ehUmCPF(campo) {
+    const cpf = campo.value.replace(/\.|-/g, "");
+    validaNumerosRepetidos(cpf);
+
+    console.log(validaNumerosRepetidos(cpf));
+}COPIAR CÓDIGO
+```
+
+<p>Salvaremos o nosso código e retornaremos ao navegador para testá-lo. Recolheremos outro CPF do site Gerador de CPFs e colaremos em nosso campo de CPF. Assim que clicarmos fora do campo, o Console retornará false, pois o valor que inserimos não possui números repetidos. Se digitarmos um número repetido, como por exemplo, "22222222222", e clicarmos fora do campo, o Console retornará true.</p>
+
+<p>Já conseguimos descobrir se existem números repetidos no campo de CPF. Contudo, esta validação é básica comparada a outras possibilidades de validação de um CPF. A seguir, realizaremos outras validações mais profundas. Nos vemos lá!</p>
