@@ -409,3 +409,85 @@ Exemplo: se utilizarmos o CPF "937.777.040-83" como base, a soma devolvida pelo 
 ```
 
 <p>A seguir, incluiremos a verificação do segundo dígito, o que nos trará total confiança na validação do CPF inserido. Nos vemos lá!</p>
+
+<h2>03. CPF: segundo dígito</h2>
+
+<p>Já validamos o primeiro dígito verificador do nosso CPF, entretanto, o trabalho com este documento não acabará por aqui! Realizaremos agora a verificação do segundo dígito. Abriremos novamente o arquivo valida-cpf.js e codaremos juntos.</p>
+
+<p>Faremos uma cópia da função validaPrimeiroDigito() disponível abaixo e vamos colá-la exatamente embaixo da primeira.</p>
+
+```
+function validaPrimeiroDigito(cpf) {
+    let soma = 0;
+    let multiplicador = 10;
+
+    for (let tamanho = 0; tamanho < 9; tamanho++) {
+        soma += cpf[tamanho] * multiplicador;
+        multiplicador--
+    }
+
+    soma = (soma * 10) % 11;
+
+    if (soma == 10 || soma == 11) {
+        soma = 0;
+    }
+
+    return soma != cpf[9];
+}
+```
+
+<p>Em seguida realizaremos algumas alterações nessa nova função.</p>
+
+<p>
+   - o nome validaPrimeiroDigito será alterado para validaSegundoDigito;
+   - a variável let multiplicador terá o seu valor alterado de 10 para 11.
+   - dentro do for vamos alterar a quantidade de repetições do laço de 09 para 10 vezes;
+   - o return que comparava a posição [9] do cpf, agora utilizará a posição [10].
+</p>
+
+<p>A função validaSegundoDigito foi criada com a mesma lógica de sua antecessora. Apenas acrescentamos o primeiro dígito ao cálculo, pois este já terá sido verificado pela função anterior. Abaixo temos o seu código completo.</p>
+
+```
+function validaSegundoDigito(cpf) {
+    let soma = 0;
+    let multiplicador = 11;
+
+    for (let tamanho = 0; tamanho < 10; tamanho++) {
+        soma += cpf[tamanho] * multiplicador;
+        multiplicador--
+    }
+
+    soma = (soma * 10) % 11;
+
+    if (soma == 10 || soma == 11) {
+        soma = 0;
+    }
+
+    return soma != cpf[10];
+}
+```
+
+<p>Adicionaremos essa nova função no início do arquivo, no interior de export default function EhUmCPF() de forma a ligá-la com validaPrimeiroDigito(cpf) e validaNumerosRepetidos(cpf) através de uma condicional. Para isso apagaremos as funções adicionadas anteriormente: validaNumerosRepetidos(cpf), validaPrimeiroDigito(cpf) e console.log(validaNumerosRepetidos(cpf)).</p>
+
+```
+    validaNumerosRepetidos(cpf);
+    validaPrimeiroDigito(cpf);
+    console.log(validaNumerosRepetidos(cpf));
+```
+
+<p>Em seguida digitaremos um if que tratará de testar as três funções que criamos de uma vez só. Caso alguma delas não retornar true, imprimiremos a mensagem "Esse cpf não existe!", e caso contrário adicionaremos um else para imprimir a mensagem "Existe!".</p>
+
+```
+export default function ehUmCPF(campo) {
+    const cpf = campo.value.replace(/\.|-/g, "");
+    if (validaNumerosRepetidos(cpf) || validaPrimeiroDigito(cpf) || validaSegundoDigito(cpf)) {
+        console.log("Esse cpf não existe!")
+    } else {
+            console.log("Existe!")
+    }
+}
+```
+
+<p>Salvaremos o nosso código e retornaremos ao Monibank pelo navegador. Dentro do campo CPF digitaremos um documento que não existe e clicaremos para fora. Neste momento a aba "Console" no interior de "Ferramentas do desenvolvedor" exibirá a mensagem "Esse cpf não existe!". Vamos testar também com um CPF do Gerador de CPFs disponível neste link. Quando ele for digitado será exibida na aba "Console" a mensagem "Existe!".</p>
+
+<p>Todas as validações que criamos para o CPF estão funcionais, portanto podemos iniciar a etapa de validação de idade da pessoa usuária. Até lá!</p>
