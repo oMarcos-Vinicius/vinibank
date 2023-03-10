@@ -491,3 +491,71 @@ export default function ehUmCPF(campo) {
 <p>Salvaremos o nosso código e retornaremos ao Monibank pelo navegador. Dentro do campo CPF digitaremos um documento que não existe e clicaremos para fora. Neste momento a aba "Console" no interior de "Ferramentas do desenvolvedor" exibirá a mensagem "Esse cpf não existe!". Vamos testar também com um CPF do Gerador de CPFs disponível neste link. Quando ele for digitado será exibida na aba "Console" a mensagem "Existe!".</p>
 
 <p>Todas as validações que criamos para o CPF estão funcionais, portanto podemos iniciar a etapa de validação de idade da pessoa usuária. Até lá!</p>
+
+<h2>07. Validação idade</h2>
+
+<p>O Monibank não aceita clientes menores de idade, portanto devemos criar uma validação que garanta que a pessoa cadastrada não seja menor de 18 anos.</p>
+
+<p>O primeiro passo é criar um arquivo para esse código, pois conforme dito anteriormente, vamos trabalhar com um arquivo diferente para cada validação. Acessaremos o explorador do Visual Studio Code, clicaremos na pasta "js" e selecionaremos o ícone de "Novo Arquivo" na barra superior do explorador. Daremos a ele o nome valida-idade.js.</p>
+
+<p>Em seu interior, criaremos a função principal do arquivo: ehMaiorDeIdade(), que recebe o valor de campo. Dentro das chaves adicionaremos a variável const dataNascimento que possuirá um new Date(), que por sua vez recebe o campo.value do campo "Data de nascimento" e o converte em um valor inteligível pelo Javascript. Em seguida verificaremos a conversão do valor de dataNascimento através um console.log.</p>
+
+```
+export default function ehMaiorDeIdade(campo) {
+    const dataNascimento = new Date(campo.value);
+    console.log(validaIdade(dataNascimento));
+}
+```
+
+<p>Para que o console.log funcione, precisamos importar essa função no arquivo script.js. Acessaremos este arquivo no interior da pasta "js" através do explorador e importaremos ehMaiorDeIdade logo abaixo de ehUmCPF, na linha 2.</p>
+
+```
+import ehUmCPF from "./valida-cpf.js";
+import ehMaiorDeIdade from "./valida-idade.js";
+```
+
+<p>Ainda no interior deste arquivo, no interior da seção verificaCampo(campo) e abaixo do primeiro if, adicionaremos um segundo que verificará se o campo possui o nome "aniversario" e se ele está vazio. Caso ambas as condições forem verdadeiras, ele chamará a função ehMaiorDeIdade() para aquele campo.</p>
+
+```
+function verificaCampo(campo) {
+    if (campo.name == "cpf" && campo.value.length >= 11) {
+        ehUmCPF(campo);
+    }
+    if (campo.name == "aniversario" && campo.value != "") {
+        ehMaiorDeIdade(campo);
+    }
+}
+```
+
+<p>Acessaremos o navegador e incluiremos a minha data de nascimento no campo "Data de nascimento": 04/01/1999. Neste momento o Console exibe as informações dessa data convertidas em Javascript: Sun Jan 03 1999 22:00:00, o que significa que a nossa função está funcionando.</p>
+
+<p>Retornando ao VS Code, acessaremos novamente o arquivo valida-idade.js e substituiremos o console.log pela função validaIdade() que por sua vez enviará o valor de dataNascimento. Em seguida criaremos um console.log para retornar o valor de validaIdade(dataNascimento).</p>
+
+<p>Criaremos também a própria fuction validaIdade(), abaixo das chaves da seção ehMaiorDeIdade(campo). Esta função possuirá os seguintes elementos:</p>
+
+<p>
+    - a variável dataAtual que receberá a data do momento atual em que estamos;
+    - a variável dataMais18 que receberá os parâmetros de ano, mês e dia da data de nascimento inserida no campo e adicionará a ela uo número 18. - Assim podemos saber em que ano aquela pessoa fez 18;
+    - um return que verificará se data atual é maior ou igual a dataMais18, confirmando que a pessoa usuária já completou 18 anos.
+</p>
+
+```
+export default function ehMaiorDeIdade(campo) {
+    const dataNascimento = new Date(campo.value);
+    validaIdade(dataNascimento);
+
+    console.log(validaIdade(dataNascimento));
+}
+
+function validaIdade(data) {
+    const dataAtual = new Date();
+    const dataMais18 = new Date(data.getUTCFullYear() + 18, data.getUTCMonth(), data.getUTCDate());
+
+    return dataAtual >= dataMais18;
+}
+```
+
+<p>Retornaremos ao navegador. Se incluirmos a minha data de nascimento novamente no campo "Data de nascimento", o Console retornará true, pois eu sou maior de idade. Entretanto se alterarmos o ano para "2010", o Console retornará false, pois até aquele momento ela possui menos de 18 anos.</p>
+
+<p>Conseguimos configurar a validação de maioridade, entretanto o sistema ainda não retorna nenhuma mensagem, somente true ou false. A seguir, lidaremos com mensagens customizadas para cada erro. Nos vemos lá!</p>
+
