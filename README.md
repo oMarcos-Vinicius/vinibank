@@ -643,3 +643,107 @@ const tiposDeErro = [
 <p>Observação: as mensagens podem ser customizadas do jeito que quiser. Caso queira fazer alguma mudança, fique à vontade para tomar as rédeas do seu projeto e soltar a criatividade!</p>
 
 <p>Já separamos os tipos de erro e criamos mensagens customizadas. A seguir, uniremos todas as informações e configuraremos a impressão de cada mensagem, conectando-as a seus respectivos erros. Nos vemos lá!</p>
+
+<h2>05. Imprimindo mensagens</h2>
+
+<p>Criamos uma lista reunindo todos os tipos de erros que podem ocorrer e outra lista com as mensagens customizadas para cada um deles. Vamos configurar a aplicação para que, ao ativarmos cada erro, a sua respectiva mensagem apareçam na tela.</p>
+
+<p>Retornando ao código, ainda no arquivo script.js, no interior da função verificaCampo(campo) criaremos uma let mensagem recebendo um valor vazio, e depois substituiremos o comando console.log(campo.validity) por uma listatiposDeErro.forEach que executará uma função para cada item de erro. Em seu interior criaremos um if que observará se o campo.validity é true, e em caso positivo, o erro está ocorrendo. Incluiremos neste if a variável mensagem para receber uma mensagem de erro de dentro da lista mensagens[], identificando-a através do campo.name e do nome daquele erro específico. Em seguida imprimiremos o valor de mensagem no console.</p>
+
+```
+function verificaCampo(campo) 
+    let mensagem = "";
+    if (campo.name == "cpf" && campo.value.length >= 11) {
+        ehUmCPF(campo);
+    }
+    if (campo.name == "aniversario" && campo.value != "") {
+        ehMaiorDeIdade(campo);
+    }
+    tiposDeErro.forEach(erro => {
+        if (campo.validity[erro]) {
+            mensagem = mensagens[campo.name][erro];
+            console.log(mensagem);
+        }
+    })
+```
+
+<p>Salvaremos o código e acessaremos o navegador, ainda com o Console aberto, para testar o código. Se clicarmos no campo Nome e em seguida clicarmos fora, o Console exibirá a mensagem "O campo de nome não pode estar vazio." Podemos ver, portanto, que o código está funcional.</p>
+
+<p>No momento estamos imprimindo a mensagem somente no console, entretanto, queremos imprimi-la na tela. Para isso acessaremos o arquivo que representa o local em que devemos imprimir mensagens de erro: o abrir-conta-form.html.</p>
+
+<p>Em seu interior verificaremos cada fieldset no qual existe um input name. Embaixo deste existe um span com a classe mensagem-erro — é nele que vamos inserir as mensagens de erro.</p>
+
+<p>Exemplo: fieldset do campo "Nome":</p>
+
+```
+                <fieldset class="formulario__campo">
+                    <label class="campo__etiqueta" for="nome">Nome</label>
+                    <input name="nome" id="nome" class="campo__escrita" type="text" minlength="3" required />
+                    <span class="mensagem-erro"></span>
+                </fieldset>
+```
+
+<p>Copiaremos o trecho com o nome da classe: mensagem-erro e acessaremos novamente o arquivo script.js. Em seu interior vamos retornar à função verificaCampo(campo) e criar logo abaixo de tiposDeErro.forEach uma variável const mensagemErro que selecionará o span de mensagem-erro do nosso HTML através de um campo.parentNode.querySelector que por sua vez receberá o código que copiamos: mensagem-erro. Este comando selecionará somente o span do input mais próximo.</p>
+
+<p>Em seguida, criaremos a variável const validadorDeInput que receberá um campo.checkValidity(). Este trecho checará se o campo é válido ou não. Adicionaremos também um if que imprimirá uma mensagem de erro caso o validadorDeInput retorne false, e em seguida um else que retornará um valor vazio caso o validadorDeInput retorne true.</p>
+
+```
+    tiposDeErro.forEach(erro => {
+        if (campo.validity[erro]) {
+            mensagem = mensagens[campo.name][erro];
+            console.log(mensagem);
+        }
+    })
+    const mensagemErro = campo.parentNode.querySelector('.mensagem-erro');
+    const validadorDeInput = campo.checkValidity();
+
+    if (!validadorDeInput) {
+        mensagemErro.textContent = mensagem;
+    } else {
+        mensagemErro.textContent = "";
+    }
+```
+
+<p>Os comandos que digitamos possibilitam que o sistema imprima as mensagens de erro padrão. Entretanto, queremos que ele imprima as mensagens customizadas. Para isso, acessaremos os arquivos valida-idade.js e valida-cpf.js, respectivamente. No interior das funções ehMaiorDeIdade e ehUmCPF de cada arquivo faremos as alterações abaixo:</p>
+
+<p>- dentro de ehMaiorDeIdade substituiremos a função de verificação validaIdade por um if que verifica o validaIdade e recebe um parâmetro dataNascimento. Em seu interior adicionaremos um campo.setCustomValidity que receberá a nossa mensagem customizada: "A pessoa usuária não é maior de idade."</p>
+
+```
+export default function ehMaiorDeIdade(campo) {
+    const dataNascimento = new Date(campo.value);
+    if (!validaIdade(dataNascimento)) {
+        campo.setCustomValidity('O usuário não é maior de idade');
+    }
+}
+```
+
+<p>- no interior de ehUmCPF, abaixo da seção const cpf = campo.value.replace, vamos deletar o console.log() dentro do if e também substituiremos todo a seção else por um campo.setCustomValidity que receberá a nossa mensagem customizada: "Este cpf não é válido."</p>
+
+```
+export default function ehUmCPF(campo) {
+    const cpf = campo.value.replace(/\.|-/g, "");
+    if (validaNumerosRepetidos(cpf) || validaPrimeiroDigito(cpf) || validaSegundoDigito(cpf)) {
+        campo.setCustomValidity('Esse cpf não é válido');
+    }
+}
+```
+
+<p>Vamos entender o código? O customError só é ativado no momento em que o setCustomValidity não for false. Esta lógica precisava ser implementada manualmente, e para isso adicionamos o campo.setCustomValidity com um valor qualquer diretamente no ehUmCPF. Através da inserção deste valor o customError deixou de ser false, e portanto a mensagem pôde ser exibida.</p>
+
+<p>A partir destas alterações, se retornarmos ao navegador, clicarmos no campo "Data de nascimento", preenchermos uma data menor do que 18 anos atrás e clicarmos fora, a aplicação retornará abaixo do campo a mensagem "O usuário é maior de idade" na cor vermelha. Caso a data gere um resultado maior do que 18, nenhuma mensagem será exibida.</p>
+
+<p>Da mesma forma, se clicarmos no campo "CPF", adicionarmos um CPF válido copiado do site Gerador de CPFs e clicarmos fora, nenhuma mensagem será exibida. Entretanto, se inventarmos um CPF qualquer, a aplicação retornará abaixo do campo a mensagem "Esse cpf não é válido" na cor vermelha.</p>
+
+<p>Por enquanto, se adicionarmos qualquer dado válido por cima de um dado inválido, a mensagem de erro permanecerá na tela. Para consertar esse problema, configuraremos a aplicação para redefinir o setCustomValidity() do campo. Para isso, retornaremos ao arquivo script.js e acessaremos a função verificaCampo(campo). Abaixo de let mensagem = "", adicionaremos um campo.setCustomValidity() que receberá um valor vazio.</p>
+
+```
+function verificaCampo(campo) 
+    let mensagem = "";
+    campo.setCustomValidity('');
+    // Trecho de código omitido
+```
+
+<p>Salvaremos esse código e retornaremos ao navegador com o Console aberto. Adicionaremos no campo "CPF" um CPF inválido e clicaremos fora do campo. A mensagem de erro será exibida. Se, em seguida, adicionarmos um CPF válido, a mensagem de erro abaixo do campo desaparecerá.</p>
+
+<p>Implementamos as verificações e fizemos a aplicação exibir as mensagens de erro na tela. A seguir, aprenderemos a enviar os dados do nosso formulário, simulando um cadastro. Até lá!</p>
+
