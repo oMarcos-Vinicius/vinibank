@@ -559,3 +559,41 @@ function validaIdade(data) {
 
 <p>Conseguimos configurar a validação de maioridade, entretanto o sistema ainda não retorna nenhuma mensagem, somente true ou false. A seguir, lidaremos com mensagens customizadas para cada erro. Nos vemos lá!</p>
 
+<h1>Módulo 04. Comunicando ao Usuário</h1>
+
+<h2>02. Validity State</h2>
+
+<p>É possível inserir mensagens customizadas para cada tipo de erro que acontecer nos inputs do nosso formulário. Entretanto, é importante entender como o Javascript detecta esses erros nos bastidores da aplicação.</p>
+
+<p>Acessaremos o interior do arquivo script.js. Abaixo do segundo if no interior de verificaCampo(campo) incluiremos um console.log(campo.validity).</p>
+
+```
+function verificaCampo(campo) {
+    if (campo.name == "cpf" && campo.value.length >= 11) {
+        ehUmCPF(campo);
+    }
+    if (campo.name == "aniversario" && campo.value != "") {
+        ehMaiorDeIdade(campo);
+    }
+    console.log(campo.validity);
+}
+```
+
+<p>Salvaremos o código e retornaremos ao navegador, abrindo novamente a aba "Console" dentro das "Ferramentas do desenvolvedor", através do atalho "Ctrl + Shift + I".</p>
+
+<p>Clicaremos no campo "Data de nascimento" e depois fora dele. Neste momento o Console retornará uma lista chamada ValidityState que exibe possíveis erros de validação que ocorrem automaticamente quando interagimos com esse formulário. Neste caso todos os elementos estão retornando false, menos o valueMissing, já que deixamos o campo sem nenhum valor preenchido.</p>
+
+<p>Entre estes possíveis erros, existe um que segue uma lógica diferente: o valid. Se qualquer um dos outros atributos retornar true, ele retornará false, informando que temos um erro acontecendo no campo que o torna inválido. Caso contrário ele retornará true, o que validará o campo.</p>
+
+<p>Se clicarmos no botão "Avançar" no final do formulário, será exibida no campo "Nome" a mensagem "Preencha este campo", padrão para quando o valueMissing for true. Vamos retirar esta mensagem que para nós é um pouco limitada retornando ao Vs Code e acessando novamente o script.js.</p>
+
+<p>Dentro da seção camposDoFormulario.forEach, abaixo de campo.addEventListener adicionaremos outro campo.addEventListener que possuirá o valor "invalid" e uma variável evento que enviará por sua vez uma função seta para evento.preventDefault().</p>
+
+```
+camposDoFormulario.forEach((campo) => {
+    campo.addEventListener("blur", () => verificaCampo(campo));
+    campo.addEventListener("invalid", evento => evento.preventDefault())
+})
+```
+
+<p>Salvaremos este código. Se retornarmos ao navegador e repetirmos o clique em "Avançar", a mensagem não será mais exibida mesmo com erros de preenchimento. Dessa forma, poderemos configurar as mensagens de validação e erro do zero. Faremos essas customizações no próximo vídeo. Nos vemos lá!</p>
