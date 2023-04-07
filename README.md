@@ -597,3 +597,49 @@ camposDoFormulario.forEach((campo) => {
 ```
 
 <p>Salvaremos este código. Se retornarmos ao navegador e repetirmos o clique em "Avançar", a mensagem não será mais exibida mesmo com erros de preenchimento. Dessa forma, poderemos configurar as mensagens de validação e erro do zero. Faremos essas customizações no próximo vídeo. Nos vemos lá!</p>
+
+<h2>04. Mensagens customizadas</h2>
+
+<p>Já conhecemos diversos tipos de erro que podem ocorrer em nosso formulário através do Validity State. Entre eles, separaremos os erros que ocorrem com mais frequência.</p>
+
+<p>Retornando à lista ValidityState que foi aberta no vídeo anterior através do Console do navegador, identificamos os seguintes erros como sendo os mais frequentes:</p>
+
+<p>
+    - valueMissing;
+    - typeMismatch;
+    - patternMismatch;
+    - tooShort;
+    - customError.
+</p>
+
+<p>Vamos acessar o arquivo script.js abaixo da seção camposDoFormulario.forEach e adicioná-los através da criação de uma lista const tiposDeErro.</p>
+
+```
+camposDoFormulario.forEach((campo) => {
+    //Trecho de código omitido
+})
+
+const tiposDeErro = [
+    'valueMissing',
+    'typeMismatch',
+    'patternMismatch',
+    'tooShort',
+    'customError'
+]
+```
+
+<p>Por que selecionamos estes cinco tipos de erros? Eles representam as ações mais comuns no preenchimento de um formulário.</p>
+
+<p>
+    - o valueMissing ocorre quando deixamos o campo vazio;
+    - o typeMismatch ocorre quando erramos o tipo de input no campo, como por exemplo, na inserção de um e-mail sem o símbolo @;
+    - o patternMismatch ocorre especialmente no campo de CPF que possui um padrão de expressão regular. Se o input não segui-lo, este erro será ativado;
+    - o tooShort está relacionado aos atributos minlength e maxLength que inserimos em diversos pontos do código. Ele serve para acusar quando os padrões de comprimento do input não forem atendidos;
+    - o customError se refere a erros customizados, como nos casos em que inserimos as lógicas de validação ehUmCPF e ehMaiorDeIdade.
+</p>
+
+<p>Abaixo dessa lista de erros, criaremos mensagens customizadas para cada um deles. Para isso, devemos colar o código pronto com as mensagens de erro customizadas, disponível através deste link. Nele encontraremos a variável const mensagens onde criamos um objeto que possui propriedades cujos nomes correspondem a cada campo do nosso formulário: nome, email, rg, cpf, aniversario e termos. Cada um deles, por sua vez, recebe outro objeto que possui o nome dos possíveis erros e as respectivas mensagens que podem ser exibidas naquele campo.</p>
+
+<p>Observação: as mensagens podem ser customizadas do jeito que quiser. Caso queira fazer alguma mudança, fique à vontade para tomar as rédeas do seu projeto e soltar a criatividade!</p>
+
+<p>Já separamos os tipos de erro e criamos mensagens customizadas. A seguir, uniremos todas as informações e configuraremos a impressão de cada mensagem, conectando-as a seus respectivos erros. Nos vemos lá!</p>
