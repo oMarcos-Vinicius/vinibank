@@ -747,3 +747,100 @@ function verificaCampo(campo)
 
 <p>Implementamos as verificações e fizemos a aplicação exibir as mensagens de erro na tela. A seguir, aprenderemos a enviar os dados do nosso formulário, simulando um cadastro. Até lá!</p>
 
+<h2>07. localStorage</h2>
+
+<p>Já lidamos com vários cenários em que a pessoa usuária poderia preencher dados incorretos nos campos do nosso formulário. Mas, e se chegássemos no cenário perfeito, no qual todos os dados fossem preenchidos corretamente? Como vamos lidar com esses dados e salvá-los em algum local?</p>
+
+<p>Abriremos o Vs Code e acessaremos o arquivo abrir-conta-form.html. Em seu interior acessaremos o elemento form class="principal__formulario". Observaremos que a pessoa desenvolvedora que configurou esse HTML adicionou ao formulário um form, uma class e um data attribute chamado data-formulario. Vamos selecionar esse formulário por meio desses data attributes.</p>
+
+<p>Fecharemos o arquivo HTML e voltaremos a acessar o script.js. Em seu interior, abaixo de const camposDoFormulario criaremos a variável const formulario que receberá um document.querySelector(). No interior deste último adicionaremos o data-formulario. Daremos "Enter" para descermos duas linhas e criaremos um formulario.addEventListener(). No interior dos parênteses adicionaremos um submit para o evento de envio e, que por sua vez será recolhido por um preventDefault().</p>
+
+<p>No interior das chaves desse Event Listener adicionaremos uma listaRespostas que conterá a seguinte fórmula: "NOME_DO_CAMPO": e.target.elements["NOME_DO_CAMPO"].value. Adicionaremos uma linha desse comando para cada campo do formulário, substituindo o trecho "NOME_DO_CAMPO" por "nome", "email", "rg", "cpf" e "aniversario", respectivamente. A lista que criamos navegará pelo evento do formulário e selecionará o alvo e.target, os elements que possuem o nome daquele alvo, e também o seu value.</p>
+
+<p>Abaixo das chaves de const listaRespostas criaremos um localStorage no qual adicionaremos um set.item, que possuirá como parâmetros o cadastro e um JSON.stringify() que converterá para JSON o nosso listaRespostas, tornando possível o salvamento dos dados do formulário.</p>
+
+<p>Caso queira aprofundar seus conhecimentos sobre a propriedade localStorage, basta consultar a seção "Para saber mais: localStorage e DOM" disponível neste link, onde disponibilizamos algumas informações e links sobre esse assunto.</p>
+
+<p>Também adicionaremos um window.location.href que redirecionará a pessoa usuária para a próxima etapa do formulário — a de reconhecimento facial, recebendo a rota desse arquivo: abrir-conta-form-2.html.</p>
+
+```
+const camposDoFormulario = document.querySelectorAll('[required]')
+const formulario = document.querySelector('[data-formulario]');
+
+formulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const listaRespostas = {
+        "nome": e.target.elements["nome"].value,
+        "email": e.target.elements["email"].value,
+        "rg": e.target.elements["rg"].value,
+        "cpf": e.target.elements["cpf"].value,
+        "aniversario": e.target.elements["aniversario"].value,
+    }
+    localStorage.setItem("cadastro", JSON.stringify(listaRespostas));
+
+    window.location.href = "./abrir-conta-form-2.html";
+})
+```
+
+<p>Salvaremos o código e testaremos no navegador. Na página do formulário, com a coluna "Ferramentas do desenvolvedor" aberta ao lado direito, digitaremos todos os campos de modo que sejam válidos, clicaremos no checkbox e depois no botão "Avançar". Nesse momento seremos redirecionados para a página de reconhecimento facial. Para descobrir onde esses dados foram salvos acessaremos o menu superior de "Ferramentas do desenvolvedor" e selecionaremos a aba "Aplicativo". Neste momento outra aba será aberta à esquerda. Nela localizaremos a opção "Armazenamento local" a qual possui a URL do nosso servidor local. Clicaremos nesta URL e visualizaremos na coluna principal de "Ferramentas do desenvolvedor" duas colunas denominadas "chave", cujo conteúdo é "cadastro" e "Valor", cujo interior armazena todas as informações preenchidas no formulário. Podemos constatar que os dados estão armazenados em nossa sessão local.</p>
+
+<p>Completamos a primeira etapa. No próximo vídeo configuraremos a funcionalidade na qual será possível tirar fotografias do rosto e uniremos os dados dessa foto aos dados do formulário. Deixaremos bem completo o processo de cadastro do nosso Monibank. Nos vemos lá!</p>
+
+<h1>Módulo 05. Capturando fotos</h1>
+
+<h2>02. Iniciar câmera</h2>
+
+<p>Chegamos na segunda etapa do cadastro de pessoas usuárias do nosso Monibank, que consiste na pessoa usuária ser capaz de tirar uma fotografia de si para completar o cadastro.</p>
+
+<p>Rodaremos a página de reconhecimento facial no navegador, onde encontraremos as imagens e os títulos que já descrevemos anteriormente. Voltando ao Vs Code, acessaremos por meio do explorador a pasta "pages" e dentro dela clicaremos no arquivo abrir-conta-form-2.</p>
+
+<p>Em seu interior podemos ver os elementos que compõem cada trecho da página e também duas divs denominadas formulario__camera e formulario__mensagem. Dentro da primeira temos os elementos video que representa a nossa câmera e button que representa o botão responsável por disparar a foto. Já dentro da segunda div temos um canvas onde nossa fotografia será armazenada, uma imagem de check e um texto que representam o sucesso da operação. Temos também um botão que nos enviará para a página de conclusão do cadastro.</p>
+
+<p>Por que as duas divs não estão aparecendo na página? Eles foram ocultos pelo CSS, pois fazem parte de um ciclo de interação na página, onde devemos clicar em um elemento para que o outro seja exibido. Precisamos configurar esse ciclo com o Javascript.</p>
+
+<p>Através do explorador da IDE selecionaremos a pasta "js". Nela criaremos um novo arquivo denominado camera.js. Em seu interior criaremos as novas variáveis botaoIniciarCamera, campoCamera e video nas quais adicionaremos, respectivamente, os data attributes abaixo, copiados do HTML:</p>
+
+<p>
+    - data-video-botao que representa o rosto sorridente;
+    - data-camera que representa a câmera e
+    - data-video que representa o vídeo da câmera em si.
+</p>
+
+<p>Cada um deles será inserido na nova variável por meio do document.querySelector().</p>
+
+```
+const botaoIniciarCamera = document.querySelector("[data-video-botao]");
+const campoCamera = document.querySelector("[data-camera]");
+const video = document.querySelector("[data-video]");COPIAR CÓDIGO
+Com estes elementos criaremos o ciclo de interação.
+
+Acessaremos o arquivo abrir-conta-form-2.html e abaixo do seu footer importaremos a câmera.
+
+        // Trecho de código omitido
+    </footer>
+        <script src="../js/camera.js"></script>
+</body>
+```
+
+<p>Retornando ao arquivo camera.js, criaremos a função que inicializa o vídeo, ativada pelo clique no botaoIniciarCamera. Para isso adicionaremos nesse botão um ouvinte de eventos (event listener) que receberá como parâmetros um click e uma async function(){}. Dentro das chaves dessa function adicionaremos uma const iniciarVideo que receberá o métodoawait navigator.mediaDevices.getUserMedia() que por sua vez possuirá a função de inicializar a câmera. Dentro dos parênteses, abriremos chaves e adicionaremos video: true, audio: false para solicitarmos somente o vídeo da câmera.</p>
+
+<p>Abaixo da const iniciarVideo, ainda no interior da async function, adicionaremos ao botaoIniciarCamera um style.display = "nome" para que ele desapareça assim que a câmera for inicializada. Abaixo desse style.display adicionaremos outro dentro da câmera em si, que receberá o valor "block", permitindo dessa forma que a câmera apareça na tela. Abaixo deste segundo style.display adicionaremos um video.srcObject que receberá o iniciarVideo, configurando a tag de vídeo presente no HTML para receber como origem o navigator responsável por solicitar o acesso à câmera.</p>
+
+```
+botaoIniciarCamera.addEventListener('click', async function () {
+    const iniciarVideo = await navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false });
+
+    botaoIniciarCamera.style.display = "none";
+    campoCamera.style.display = "block";
+
+    video.srcObject = iniciarVideo;
+});
+```
+
+<p>Todo esse código funciona no Javascript de maneira assíncrona, pois precisamos aguardar a pessoa usuária aceitar o acesso à câmera dela.</p>
+
+<p>Dica: Caso você se interesse em saber mais sobre Javascript assíncrono, pode acessar e se inscrever no Curso de JavaScript: consumindo e tratando dados de uma API, disponível no site da Alura através deste link. Também indicamos o nosso Alura + sobre JavaScript assíncrono e Fetch, disponível neste link. Bons estudos!</p>
+
+<p>Conseguimos executar o processo de inicialização da câmera. A seguir, precisamos configurar a aplicação para que uma foto seja tirada quando o botão for acionado, e que seja possível visualizá-la na tela. É um conhecimento novo e muito bacana! Nos vemos lá!</p>
