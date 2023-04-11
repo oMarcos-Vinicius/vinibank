@@ -844,3 +844,55 @@ botaoIniciarCamera.addEventListener('click', async function () {
 <p>Dica: Caso você se interesse em saber mais sobre Javascript assíncrono, pode acessar e se inscrever no Curso de JavaScript: consumindo e tratando dados de uma API, disponível no site da Alura através deste link. Também indicamos o nosso Alura + sobre JavaScript assíncrono e Fetch, disponível neste link. Bons estudos!</p>
 
 <p>Conseguimos executar o processo de inicialização da câmera. A seguir, precisamos configurar a aplicação para que uma foto seja tirada quando o botão for acionado, e que seja possível visualizá-la na tela. É um conhecimento novo e muito bacana! Nos vemos lá!</p>
+
+<h2>03. Captura</h2>
+
+<p>Conseguimos inicializar a câmera. A seguir construiremos a função de captura da foto. Para isso, selecionaremos outros elementos da página abrir-conta-form-2.html.</p>
+
+<p>Acessaremos esse arquivo no VS Code. Em seu interior, abaixo de const video criaremos as novas variáveis botaoTirarFoto, canvas e mensagem nas quais adicionaremos os seguintes data attributes, respectivamente:</p>
+
+<p>
+     - data-tirar-foto que representa o botão de disparo da foto;
+     - data-video-canvas que representa a área em que será exibida a nossa foto;
+     - data-mensagem que representa o bloco de texto onde serão exibidos o ícone de check e a mensagem de conclusão da captura.
+</p>
+
+<p>Cada um deles será inserido na nova variável por meio do document.querySelector(), assim como fizemos anteriormente para as variáveis botaoIniciarCamera, campoCamera e video.</p>
+
+<p>Também criaremos a variável let imagemURL que será inicializada com um valor vazio.</p>
+
+```
+const video = document.querySelector("[data-video]");
+const botaoTirarFoto = document.querySelector("[data-tirar-foto]");
+const canvas = document.querySelector("[data-video-canvas]");
+const mensagem = document.querySelector("[data-mensagem]");
+
+let imagemURL = "";
+```
+
+<p>Com as variáveis prontas, realizaremos a conexão do ciclo de interação onde clicamos em um elemento para que o outro seja exibido. Para isso acessaremos o arquivo camera.js na pasta "js". Em seu interior, abaixo da seção botaoIniciarCamera criaremos um botaoTirarFoto junto a um addEventListener() que receberá como parâmetros um click e uma function(){}. Dentro das chaves dessa function adicionaremos uma const canvas que criará um canvas e que receberá o método getContext().drawImage(), onde getContext recolhe o contexto e drawImage recolhe e desenha a imagem da câmera no momento do clique. Dentro dos parênteses de getContext() adicionaremos o contexto 2d, e dentro dos parênteses de drawImage() adicionaremos os seguintes elementos:</p>
+
+<p>
+     - um video que representa a imagem da câmera;
+     - os parâmetros de sua posição: 0, 0,
+     - os parâmetros canvas.width e canvas.height que recolhem a largura e o tamanho do canvas, respectivamente.
+</p>
+
+<p>Com estas informações inseridas adicionaremos a imagemURL que receberá um canvas.toDataURL() cujo parâmetros será "image/jpeg". Este comando transforma a imagem gerada no canvas em uma URL, o que nos possibilitará salvá-la posteriormente.</p>
+
+<p>Abaixo de imagemURL adicionaremos um campoCamera que possuirá um style.display = "none", para que este campo desapareça assim que a foto for tirada. Abaixo desse, adicionaremos outro style.display dentro da mensagem, que receberá o valor "block", permitindo dessa forma que o check e a mensagem apareçam na tela.</p>
+
+```
+botaoTirarFoto.addEventListener('click', function () {
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    imagemURL = canvas.toDataURL('image/jpeg');
+
+    campoCamera.style.display = "none";
+    mensagem.style.display = "block";
+});
+```
+
+<p>Salvaremos o nosso código e testaremos abrindo o navegador na página de reconhecimento facial. Se clicarmos no quadro com o rosto sorridente, a câmera será inicializada e logo abaixo haverá um botão denominado "Tirar foto". Ao clicarmos nele, a foto será exibida na tela, e abaixo dela serão exibidos o ícone de check, a mensagem "Prontinho, imagem capturada!", e o botão denominado "Quero abrir minha conta!".</p>
+
+<p>Conseguimos realizar a captura de imagem. A seguir, uniremos essa imagem às informações do formulário preenchido na etapa 1. Nos vemos lá!</p>
