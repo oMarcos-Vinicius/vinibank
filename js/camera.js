@@ -4,6 +4,7 @@ const video = document.querySelector("[data-video]");
 const botaoTirarFoto = document.querySelector("[data-tirar-foto]");
 const canvas = document.querySelector("[data-video-canvas]");
 const mensagem = document.querySelector("[data-mensagem]");
+const novaFoto = document.querySelector("[data-tirar-nova-foto]");
 
 let imagemUrl = "";
 
@@ -23,4 +24,13 @@ botaoTirarFoto.addEventListener("click", function() {
 
     campoCamera.style.display = "none";
     mensagem.style.display = "block";
+
+    // parar camera
+    video.srcObject.getTracks().forEach(track => track.stop())
+})
+
+novaFoto.addEventListener("click", () => {
+    mensagem.style.display = "none";
+    botaoIniciarCamera.style.display = "block";
+    tirarFoto;
 })
