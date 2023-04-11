@@ -896,3 +896,44 @@ botaoTirarFoto.addEventListener('click', function () {
 <p>Salvaremos o nosso código e testaremos abrindo o navegador na página de reconhecimento facial. Se clicarmos no quadro com o rosto sorridente, a câmera será inicializada e logo abaixo haverá um botão denominado "Tirar foto". Ao clicarmos nele, a foto será exibida na tela, e abaixo dela serão exibidos o ícone de check, a mensagem "Prontinho, imagem capturada!", e o botão denominado "Quero abrir minha conta!".</p>
 
 <p>Conseguimos realizar a captura de imagem. A seguir, uniremos essa imagem às informações do formulário preenchido na etapa 1. Nos vemos lá!</p>
+
+
+<p>05. Salvar foto</p>
+
+<p>Durante a etapa 1 na qual a pessoa usuária preenche os campos do formulário, nós salvamos esses dados no localStorage. Vamos inserir a URL da foto tirada na etapa 2 junto aos dados alocados anteriormente.</p>
+
+<p>Retornaremos ao arquivo abrir-conta-form-2.html através do VS Code e buscaremos o botão de envio dos dados e copiaremos o seu data attribute: o data-enviar.</p>
+
+<p>Acessaremos o arquivo camera.js. Embaixo de const mensagem criaremos a variável const botaoEnviarFoto que possuirá um document.querySelector(). Dentro desse incluiremos o data-enviar.</p>
+
+```
+const mensagem = document.querySelector("[data-mensagem]");
+const botaoEnviarFoto = document.querySelector("[data-enviar]");
+
+let imagemURL = '';
+```
+
+<p>No final do arquivo, após o bloco botaoTirarFoto.addEventListener criaremos o botão botaoEnviarFoto junto ao seu addEventListener() que receberá como parâmetros um click e uma função seta (arrow function, em inglês). Dentro das chaves dessa função adicionaremos a variável const receberDadosExistentes que por sua vez receberá um localStorage.getItem(). Nos parênteses de getItem() incluiremos o cadastro. Abaixo dele adicionaremos uma const converteRetorno que receberá um JSON.parse(). Dentro desse último incluiremos o receberDadosExistentes.</p>
+
+<p>Abaixo de const converteRetorno adicionaremos um converteRetorno.imagem que receberá a imagemURL. Abaixo desse, por sua vez, adicionaremos um localStorage.setItem() dentro do qual incluiremos o cadastro e JSON.stringify() que possuirá em seu interior um converteRetorno. Por fim, abaixo de localStorage.setItem, adicionaremos um window. location.href que nos redirecionará para a página final do formulário e que receberá a rota ./abrir-conta-form-3.html.</p>
+
+```
+botaoEnviarFoto.addEventListener('click', () => {
+    const receberDadosExistentes = localStorage.getItem("cadastro");
+    const converteRetorno = JSON.parse(receberDadosExistentes);
+
+    converteRetorno.imagem = imagemURL;
+
+    localStorage.setItem('cadastro', JSON.stringify(converteRetorno))
+
+    window.location.href = '../pages/abrir-conta-form-3.html';
+})
+```
+
+<p>Vamos entender o código? Este processo que configuramos permite que após o clique no botão seja retornado o item que possui a chave "cadastro" dentro de receberDadosExistentes. Convertemos esse retorno em objeto através do JSON.parse. Criamos em seguida o atributo imagem dentro da lista de dados que recebe a URL da foto tirada. Depois criamos um setItem para inserir a chave cadastro no localStorage que já havíamos criado, efetuando assim a atualização dos dados, que agora possuem uma imagem. Também convertemos os dados novamente para JSON através do JSON.stringify. Por fim, o window.location.href que inserimos possibilita o redirecionamento para a página de confirmação de cadastro.</p>
+
+<p>Salvaremos nosso código e testaremos por meio do navegador. Clicaremos no quadro com o rosto sorridente e repetiremos o processo de tirar a fotografia. Se clicarmos no botão "Quero abrir minha conta!" seremos direcionados para a página de cadastro concluído.</p>
+
+<p>Se abrirmos a coluna de "Ferramentas do desenvolvedor" com o atalho "Ctrl + Shift + I" e acessarmos a aba "Aplicativo", veremos na coluna à direita que, além dos dados de "nome", "email", "rg", "cpf" e "aniversário" que já coletávamos anteriormente, foi incluso o atributo imagem que armazena os dados da nossa foto.</p>
+
+<p>Parabéns por ter chegado até aqui! Completamos a segunda parte do cadastro do nosso Monibank que foi muito interessante de desenvolver. Quem sabe não adicionamos a opção de validação facial em uma ocasião futura? Nos vemos em breve!</p>
